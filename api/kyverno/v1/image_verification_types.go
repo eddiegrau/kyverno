@@ -248,6 +248,21 @@ type CertificateAttestor struct {
 	// Timestamps (SCTs). If the value is unset, the default behavior by Cosign is used.
 	// +kubebuilder:validation:Optional
 	CTLog *CTLog `json:"ctlog,omitempty"`
+
+	// TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+	// for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+	// verification to succeed even after the signing certificate has expired, as long
+	// as the signature was timestamped while the certificate was valid.
+	// +kubebuilder:validation:Optional
+	TSACert string `json:"tsaCert,omitempty"`
+
+	// VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+	// Valid values are "always" (always verify timestamp), "afterCertExpiry"
+	// (verify timestamp only if the signing certificate chain has expired),
+	// or empty string (no timestamp verification, default).
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:Enum=always;afterCertExpiry;""
+	VerifyTimestamp string `json:"verifyTimestamp,omitempty"`
 }
 
 type KeylessAttestor struct {

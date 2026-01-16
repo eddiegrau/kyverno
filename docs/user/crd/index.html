@@ -1257,6 +1257,34 @@ CTLog
 Timestamps (SCTs). If the value is unset, the default behavior by Cosign is used.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>tsaCert</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<p>TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+verification to succeed even after the signing certificate has expired, as long
+as the signature was timestamped while the certificate was valid.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>verifyTimestamp</code><br/>
+<em>
+string
+</em>
+</td>
+<td>
+<p>VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+Valid values are &ldquo;always&rdquo; (always verify timestamp), &ldquo;afterCertExpiry&rdquo;
+(verify timestamp only if the signing certificate chain has expired),
+or empty string (no timestamp verification, default).</p>
+</td>
+</tr>
 </tbody>
 </table>
 <hr />

@@ -3893,6 +3893,24 @@ spec:
                                                     https://rekor.sigstore.dev.
                                                   type: string
                                               type: object
+                                            tsaCert:
+                                              description: |-
+                                                TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                verification to succeed even after the signing certificate has expired, as long
+                                                as the signature was timestamped while the certificate was valid.
+                                              type: string
+                                            verifyTimestamp:
+                                              description: |-
+                                                VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                (verify timestamp only if the signing certificate chain has expired),
+                                                or empty string (no timestamp verification, default).
+                                              enum:
+                                              - always
+                                              - afterCertExpiry
+                                              - ""
+                                              type: string
                                           type: object
                                         keyless:
                                           description: |-
@@ -4331,6 +4349,24 @@ spec:
                                                         https://rekor.sigstore.dev.
                                                       type: string
                                                   type: object
+                                                tsaCert:
+                                                  description: |-
+                                                    TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                    for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                    verification to succeed even after the signing certificate has expired, as long
+                                                    as the signature was timestamped while the certificate was valid.
+                                                  type: string
+                                                verifyTimestamp:
+                                                  description: |-
+                                                    VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                    Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                    (verify timestamp only if the signing certificate chain has expired),
+                                                    or empty string (no timestamp verification, default).
+                                                  enum:
+                                                  - always
+                                                  - afterCertExpiry
+                                                  - ""
+                                                  type: string
                                               type: object
                                             keyless:
                                               description: |-
@@ -4726,6 +4762,24 @@ spec:
                                                   the public Rekor log instance https://rekor.sigstore.dev.
                                                 type: string
                                             type: object
+                                          tsaCert:
+                                            description: |-
+                                              TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                              for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                              verification to succeed even after the signing certificate has expired, as long
+                                              as the signature was timestamped while the certificate was valid.
+                                            type: string
+                                          verifyTimestamp:
+                                            description: |-
+                                              VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                              Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                              (verify timestamp only if the signing certificate chain has expired),
+                                              or empty string (no timestamp verification, default).
+                                            enum:
+                                            - always
+                                            - afterCertExpiry
+                                            - ""
+                                            type: string
                                         type: object
                                       keyless:
                                         description: |-
@@ -9028,6 +9082,24 @@ spec:
                                                         https://rekor.sigstore.dev.
                                                       type: string
                                                   type: object
+                                                tsaCert:
+                                                  description: |-
+                                                    TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                    for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                    verification to succeed even after the signing certificate has expired, as long
+                                                    as the signature was timestamped while the certificate was valid.
+                                                  type: string
+                                                verifyTimestamp:
+                                                  description: |-
+                                                    VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                    Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                    (verify timestamp only if the signing certificate chain has expired),
+                                                    or empty string (no timestamp verification, default).
+                                                  enum:
+                                                  - always
+                                                  - afterCertExpiry
+                                                  - ""
+                                                  type: string
                                               type: object
                                             keyless:
                                               description: |-
@@ -9469,6 +9541,24 @@ spec:
                                                             Rekor log instance https://rekor.sigstore.dev.
                                                           type: string
                                                       type: object
+                                                    tsaCert:
+                                                      description: |-
+                                                        TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                        for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                        verification to succeed even after the signing certificate has expired, as long
+                                                        as the signature was timestamped while the certificate was valid.
+                                                      type: string
+                                                    verifyTimestamp:
+                                                      description: |-
+                                                        VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                        Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                        (verify timestamp only if the signing certificate chain has expired),
+                                                        or empty string (no timestamp verification, default).
+                                                      enum:
+                                                      - always
+                                                      - afterCertExpiry
+                                                      - ""
+                                                      type: string
                                                   type: object
                                                 keyless:
                                                   description: |-
@@ -9875,6 +9965,24 @@ spec:
                                                       https://rekor.sigstore.dev.
                                                     type: string
                                                 type: object
+                                              tsaCert:
+                                                description: |-
+                                                  TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                  for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                  verification to succeed even after the signing certificate has expired, as long
+                                                  as the signature was timestamped while the certificate was valid.
+                                                type: string
+                                              verifyTimestamp:
+                                                description: |-
+                                                  VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                  Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                  (verify timestamp only if the signing certificate chain has expired),
+                                                  or empty string (no timestamp verification, default).
+                                                enum:
+                                                - always
+                                                - afterCertExpiry
+                                                - ""
+                                                type: string
                                             type: object
                                           keyless:
                                             description: |-
@@ -13936,6 +14044,24 @@ spec:
                                                     https://rekor.sigstore.dev.
                                                   type: string
                                               type: object
+                                            tsaCert:
+                                              description: |-
+                                                TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                verification to succeed even after the signing certificate has expired, as long
+                                                as the signature was timestamped while the certificate was valid.
+                                              type: string
+                                            verifyTimestamp:
+                                              description: |-
+                                                VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                (verify timestamp only if the signing certificate chain has expired),
+                                                or empty string (no timestamp verification, default).
+                                              enum:
+                                              - always
+                                              - afterCertExpiry
+                                              - ""
+                                              type: string
                                           type: object
                                         keyless:
                                           description: |-
@@ -14363,6 +14489,24 @@ spec:
                                                         https://rekor.sigstore.dev.
                                                       type: string
                                                   type: object
+                                                tsaCert:
+                                                  description: |-
+                                                    TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                    for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                    verification to succeed even after the signing certificate has expired, as long
+                                                    as the signature was timestamped while the certificate was valid.
+                                                  type: string
+                                                verifyTimestamp:
+                                                  description: |-
+                                                    VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                    Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                    (verify timestamp only if the signing certificate chain has expired),
+                                                    or empty string (no timestamp verification, default).
+                                                  enum:
+                                                  - always
+                                                  - afterCertExpiry
+                                                  - ""
+                                                  type: string
                                               type: object
                                             keyless:
                                               description: |-
@@ -14758,6 +14902,24 @@ spec:
                                                   the public Rekor log instance https://rekor.sigstore.dev.
                                                 type: string
                                             type: object
+                                          tsaCert:
+                                            description: |-
+                                              TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                              for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                              verification to succeed even after the signing certificate has expired, as long
+                                              as the signature was timestamped while the certificate was valid.
+                                            type: string
+                                          verifyTimestamp:
+                                            description: |-
+                                              VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                              Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                              (verify timestamp only if the signing certificate chain has expired),
+                                              or empty string (no timestamp verification, default).
+                                            enum:
+                                            - always
+                                            - afterCertExpiry
+                                            - ""
+                                            type: string
                                         type: object
                                       keyless:
                                         description: |-
@@ -19040,6 +19202,24 @@ spec:
                                                         https://rekor.sigstore.dev.
                                                       type: string
                                                   type: object
+                                                tsaCert:
+                                                  description: |-
+                                                    TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                    for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                    verification to succeed even after the signing certificate has expired, as long
+                                                    as the signature was timestamped while the certificate was valid.
+                                                  type: string
+                                                verifyTimestamp:
+                                                  description: |-
+                                                    VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                    Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                    (verify timestamp only if the signing certificate chain has expired),
+                                                    or empty string (no timestamp verification, default).
+                                                  enum:
+                                                  - always
+                                                  - afterCertExpiry
+                                                  - ""
+                                                  type: string
                                               type: object
                                             keyless:
                                               description: |-
@@ -19481,6 +19661,24 @@ spec:
                                                             Rekor log instance https://rekor.sigstore.dev.
                                                           type: string
                                                       type: object
+                                                    tsaCert:
+                                                      description: |-
+                                                        TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                        for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                        verification to succeed even after the signing certificate has expired, as long
+                                                        as the signature was timestamped while the certificate was valid.
+                                                      type: string
+                                                    verifyTimestamp:
+                                                      description: |-
+                                                        VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                        Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                        (verify timestamp only if the signing certificate chain has expired),
+                                                        or empty string (no timestamp verification, default).
+                                                      enum:
+                                                      - always
+                                                      - afterCertExpiry
+                                                      - ""
+                                                      type: string
                                                   type: object
                                                 keyless:
                                                   description: |-
@@ -19887,6 +20085,24 @@ spec:
                                                       https://rekor.sigstore.dev.
                                                     type: string
                                                 type: object
+                                              tsaCert:
+                                                description: |-
+                                                  TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+                                                  for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+                                                  verification to succeed even after the signing certificate has expired, as long
+                                                  as the signature was timestamped while the certificate was valid.
+                                                type: string
+                                              verifyTimestamp:
+                                                description: |-
+                                                  VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+                                                  Valid values are "always" (always verify timestamp), "afterCertExpiry"
+                                                  (verify timestamp only if the signing certificate chain has expired),
+                                                  or empty string (no timestamp verification, default).
+                                                enum:
+                                                - always
+                                                - afterCertExpiry
+                                                - ""
+                                                type: string
                                             type: object
                                           keyless:
                                             description: |-

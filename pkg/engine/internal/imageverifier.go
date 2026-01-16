@@ -643,6 +643,12 @@ func (iv *ImageVerifier) buildNotaryVerifier(
 		Client:    iv.rclient,
 	}
 
+	// Add TSA certificate and timestamp verification options for Notary
+	if attestor.Certificates != nil {
+		opts.TSACertChain = attestor.Certificates.TSACert
+		opts.NotaryVerifyTimestamp = attestor.Certificates.VerifyTimestamp
+	}
+
 	if attestation != nil {
 		opts.Type = attestation.Type
 		opts.PredicateType = attestation.PredicateType
