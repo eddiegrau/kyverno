@@ -2600,6 +2600,70 @@ Timestamps (SCTs). If the value is unset, the default behavior by Cosign is used
       </tr>
     
   
+    
+    
+      <tr>
+        <td><code>tsaCert</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>TSACert is an optional PEM-encoded TSA (Timestamp Authority) root certificate
+for verifying RFC 3161 timestamps on Notary signatures. This enables signature
+verification to succeed even after the signing certificate has expired, as long
+as the signature was timestamped while the certificate was valid.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>verifyTimestamp</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>VerifyTimestamp controls timestamp verification behavior for Notary signatures.
+Valid values are &quot;always&quot; (always verify timestamp), &quot;afterCertExpiry&quot;
+(verify timestamp only if the signing certificate chain has expired),
+or empty string (no timestamp verification, default).</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
 
 
       </tbody>
