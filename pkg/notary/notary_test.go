@@ -70,3 +70,28 @@ func TestNotaryImageVerification(t *testing.T) {
 	_, err = verifier.VerifySignature(context.TODO(), opts)
 	assert.NilError(t, err)
 }
+
+func TestBuildPolicy(t *testing.T) {
+	v := &notaryVerifier{}
+
+	// Test without TSA
+	policy := v.buildPolicy(false, "")
+	assert.Equal(t, 1, len(policy.TrustPolicies))
+	assert.DeepEqual(t, []string{"ca:kyverno"}, policy.TrustPolicies[0].TrustStores)
+	assert.Equal(t, "", string(policy.TrustPolicies[0].SignatureVerification.VerifyTimestamp))
+
+	// Test with TSA but no verifyTimestamp
+	policy = v.buildPolicy(true, "")
+	assert.DeepEqual(t, []string{"ca:kyverno", "tsa:kyverno"}, policy.TrustPolicies[0].TrustStores)
+	assert.Equal(t, "", string(policy.TrustPolicies[0].SignatureVerification.VerifyTimestamp))
+
+	// Test with TSA and verifyTimestamp=always
+	policy = v.buildPolicy(true, "always")
+	assert.DeepEqual(t, []string{"ca:kyverno", "tsa:kyverno"}, policy.TrustPolicies[0].TrustStores)
+	assert.Equal(t, "always", string(policy.TrustPolicies[0].SignatureVerification.VerifyTimestamp))
+
+	// Test with TSA and verifyTimestamp=afterCertExpiry
+	policy = v.buildPolicy(true, "afterCertExpiry")
+	assert.DeepEqual(t, []string{"ca:kyverno", "tsa:kyverno"}, policy.TrustPolicies[0].TrustStores)
+	assert.Equal(t, "afterCertExpiry", string(policy.TrustPolicies[0].SignatureVerification.VerifyTimestamp))
+}

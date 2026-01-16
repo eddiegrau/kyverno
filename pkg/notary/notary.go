@@ -3,6 +3,7 @@ package notary
 import (
 	"bytes"
 	"context"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 
@@ -19,6 +20,7 @@ import (
 	notationlog "github.com/notaryproject/notation-go/log"
 	"github.com/notaryproject/notation-go/verifier"
 	"github.com/notaryproject/notation-go/verifier/trustpolicy"
+	"github.com/notaryproject/notation-go/verifier/truststore"
 	"github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pkg/errors"
@@ -50,8 +52,12 @@ func (v *notaryVerifier) VerifySignature(ctx context.Context, opts images.Option
 		return nil, errors.Wrapf(err, "failed to parse certificates")
 	}
 
-	trustStore := NewTrustStore("kyverno", certs)
-	policyDoc := v.buildPolicy()
+	trustStore, hasTSA, err := v.buildTrustStore(certs, opts.TSACertChain)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to build trust store")
+	}
+
+	policyDoc := v.buildPolicy(hasTSA, opts.NotaryVerifyTimestamp)
 	notationVerifier, err := verifier.New(policyDoc, trustStore, nil)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to created verifier")
@@ -102,15 +108,51 @@ func combineCerts(opts images.Options) string {
 	return certs
 }
 
-func (v *notaryVerifier) buildPolicy() *trustpolicy.Document {
+// buildTrustStore creates a trust store with CA certificates, and optionally TSA certificates
+func (v *notaryVerifier) buildTrustStore(caCerts []*x509.Certificate, tsaCertPEM string) (truststore.X509TrustStore, bool, error) {
+	// If no TSA cert provided, use simple trust store for backward compatibility
+	if tsaCertPEM == "" {
+		return NewTrustStore("kyverno", caCerts), false, nil
+	}
+
+	// Parse TSA certificates
+	tsaCerts, err := cryptoutils.LoadCertificatesFromPEM(bytes.NewReader([]byte(tsaCertPEM)))
+	if err != nil {
+		return nil, false, errors.Wrapf(err, "failed to parse TSA certificates")
+	}
+
+	// Create multi-trust store with both CA and TSA certs
+	multiStore := NewMultiTrustStore()
+	multiStore.AddStore(truststore.TypeCA, "kyverno", caCerts)
+	multiStore.AddStore(truststore.TypeTSA, "kyverno", tsaCerts)
+
+	v.log.V(4).Info("configured trust store with TSA support", "caCerts", len(caCerts), "tsaCerts", len(tsaCerts))
+
+	return multiStore, true, nil
+}
+
+func (v *notaryVerifier) buildPolicy(hasTSA bool, verifyTimestamp string) *trustpolicy.Document {
+	trustStores := []string{"ca:kyverno"}
+	sigVerification := trustpolicy.SignatureVerification{
+		VerificationLevel: trustpolicy.LevelStrict.Name,
+	}
+
+	if hasTSA {
+		trustStores = append(trustStores, "tsa:kyverno")
+	}
+
+	if verifyTimestamp != "" {
+		sigVerification.VerifyTimestamp = trustpolicy.TimestampOption(verifyTimestamp)
+	}
+
 	return &trustpolicy.Document{
 		Version: "1.0",
 		TrustPolicies: []trustpolicy.TrustPolicy{
 			{
 				Name:                  "kyverno",
 				RegistryScopes:        []string{"*"},
-				SignatureVerification: trustpolicy.SignatureVerification{VerificationLevel: trustpolicy.LevelStrict.Name},
-				TrustStores:           []string{"ca:kyverno"},
+				SignatureVerification: sigVerification,
+				TrustStores:           trustStores,
 				TrustedIdentities:     []string{"*"},
 			},
 		},
@@ -234,8 +276,15 @@ func verifyAttestators(ctx context.Context, v *notaryVerifier, ref name.Referenc
 	}
 
 	v.log.V(4).Info("parsed certificates")
-	trustStore := NewTrustStore("kyverno", certs)
-	policyDoc := v.buildPolicy()
+
+	// Build trust store with CA certs, and optionally TSA certs
+	trustStore, hasTSA, err := v.buildTrustStore(certs, opts.TSACertChain)
+	if err != nil {
+		v.log.V(4).Info("failed to build trust store", "err", err)
+		return ocispec.Descriptor{}, errors.Wrapf(err, "failed to build trust store")
+	}
+
+	policyDoc := v.buildPolicy(hasTSA, opts.NotaryVerifyTimestamp)
 	notationVerifier, err := verifier.New(policyDoc, trustStore, nil)
 	if err != nil {
 		v.log.V(4).Info("failed to created verifier", "err", err)
